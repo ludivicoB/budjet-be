@@ -1,6 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import testRoutes from "./routes/test.route";
 import authRoutes from "./routes/auth.routes";
+import budgetRoutes from "./routes/budget.routes";
+import dashboardRoutes from "./routes/dashboard.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import cors from "cors";
 
@@ -18,7 +20,7 @@ export const createServer = (): Application => {
   app.use(express.urlencoded({ extended: true }));
 
   // Health check
-  app.get("/", (req: Request, res: Response) => {
+  app.get("/", (_: Request, res: Response) => {
     res.json({
       message: "Express + Supabase API",
       status: "healthy",
@@ -29,6 +31,8 @@ export const createServer = (): Application => {
   // Routes
   app.use("/api/test", testRoutes);
   app.use("/api/auth", authRoutes);
+  app.use("/api/dashboard", dashboardRoutes);
+  app.use("/api/budget", budgetRoutes);
 
   // Error handler (must be last)
   app.use(errorHandler);
