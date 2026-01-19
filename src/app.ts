@@ -3,6 +3,7 @@ import testRoutes from "./routes/test.route";
 import authRoutes from "./routes/auth.routes";
 import budgetRoutes from "./routes/budget.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
+import transactionRoutes from "./routes/transaction.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import cors from "cors";
 
@@ -33,6 +34,7 @@ export const createServer = (): Application => {
   app.use("/api/auth", authRoutes);
   app.use("/api/dashboard", dashboardRoutes);
   app.use("/api/budget", budgetRoutes);
+  app.use("/api/transaction", transactionRoutes);
 
   // Error handler (must be last)
   app.use(errorHandler);
