@@ -4,6 +4,7 @@ import { allowedFields, requireFields } from "../utils/validate";
 import { BudgetService } from "../services/budget.service";
 import { sendSuccess } from "../utils/api.response";
 import { AuthRequest } from "../middlewares/auth.middleware";
+import { generateBudgetInsight } from "../services/budgetInsight.service";
 
 export const BudgetController = {
   create: asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -70,5 +71,12 @@ export const BudgetController = {
     const user_id = req.user!.id;
     const result = await BudgetService.delete(id as string, user_id);
     sendSuccess(res, result, "Budget deleted");
+  }),
+  getBudgetInsight: asyncHandler(async (req: AuthRequest, res: Response) => {
+    const result = await generateBudgetInsight(
+      req.user!.id,
+      req.params.id as string,
+    );
+    sendSuccess(res, result, "Budget insight fetched");
   }),
 };

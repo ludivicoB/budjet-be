@@ -13,4 +13,5 @@ router.put("/pin/:id", BudgetController.pin);
 router.put("/unpin/:id", BudgetController.unpin);
 router.delete("/:id", BudgetController.delete);
 
+router.post("/:id/insight", BudgetController.getBudgetInsight);
 export default router;
