@@ -8,7 +8,7 @@ export const BudgetService = {
       .select("*", { count: "exact", head: true })
       .eq("user_id", data.user_id);
 
-    if (count! >= 1) {
+    if (count! >= 5) {
       throw new Error("You have reached the maximum number of budgets");
     }
 
