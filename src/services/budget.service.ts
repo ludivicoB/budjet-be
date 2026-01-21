@@ -8,11 +8,10 @@ export const BudgetService = {
       .select("*", { count: "exact", head: true })
       .eq("user_id", data.user_id);
 
-    if (!count) {
-      throw new Error("User not found");
-    } else if (count >= 5) {
+    if (count! >= 1) {
       throw new Error("You have reached the maximum number of budgets");
     }
+
     const { data: budget, error } = await supabase
       .from("budgets")
       .insert(data)
