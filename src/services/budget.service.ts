@@ -3,6 +3,16 @@ import { Budget, BudgetRequest } from "../types/budget.types";
 
 export const BudgetService = {
   create: async (data: BudgetRequest): Promise<Budget> => {
+    const { count } = await supabase
+      .from("budgets")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", data.user_id);
+
+    if (!count) {
+      throw new Error("User not found");
+    } else if (count >= 5) {
+      throw new Error("You have reached the maximum number of budgets");
+    }
     const { data: budget, error } = await supabase
       .from("budgets")
       .insert(data)
@@ -119,7 +129,7 @@ export const BudgetService = {
   edit: async (
     budgetId: string,
     userId: string,
-    data: BudgetRequest
+    data: BudgetRequest,
   ): Promise<Budget> => {
     // 1. Check ownership first
     const { data: existingBudget, error: fetchError } = await supabase

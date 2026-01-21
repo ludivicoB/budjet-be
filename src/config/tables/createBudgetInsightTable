@@ -1,7 +1,11 @@
 create table budget_insights (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null,
-  budget_id uuid not null,
+  user_id uuid not null
+    references users(id)
+    on delete cascade,
+  budget_id uuid not null
+    references budgets(id)
+    on delete cascade,
   insight text not null,
   created_at date not null default current_date,
 

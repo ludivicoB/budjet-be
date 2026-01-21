@@ -10,19 +10,14 @@ export async function generateBudgetInsight(
   budgetId: string,
 ): Promise<{ insight: string; fromAI: boolean }> {
   // 1. Enforce once per day
-  if (await hasInsightToday(userId, budgetId)) {
+  const existingID = await hasInsightToday(userId, budgetId);
+  if (existingID) {
     const { data: existingInsight } = await supabase
       .from("budget_insights")
       .select("insight")
-      .eq("budget_id", budgetId)
-      .eq("user_id", userId)
+      .eq("id", existingID)
       .single();
-
-    if (!existingInsight) {
-      throw new Error("Insight not found");
-    }
-
-    return { insight: existingInsight.insight as string, fromAI: false };
+    return { insight: existingInsight?.insight, fromAI: false };
   }
 
   // 2. Aggregate context
@@ -34,7 +29,8 @@ export async function generateBudgetInsight(
 
   try {
     insight = await geminiService.generateText(buildBudgetPrompt(context));
-  } catch {
+  } catch (error: any) {
+    console.error("Gemini error", error);
     insight = fallbackInsight(context);
     fromAI = false;
   }
